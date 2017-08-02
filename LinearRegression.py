@@ -41,6 +41,32 @@ def test_Ridge_alpha(*data):
     plt.title("Ridge")
     plt.show()
 
-if __name__=='__main__':
+def test_lasso(*data):
+    X_train, X_test, y_train, y_test = data
+    regr = linear_model.Lasso()
+    regr.fit(X_train, y_train)
+    print('Coefficients:%s, intercept %.2f' % (regr.coef_, regr.intercept_))
+    print("Residual sum of squares: %.2f" % np.mean((regr.predict(X_test) - y_test) ** 2))
+    print('Score: %.2f' % regr.score(X_test, y_test))
+
+def test_Lasso_alpha(*data):
+    X_train, X_test, y_train, y_test = data
+    alphas = [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000]
+    scores = []
+    for i, alpha in enumerate(alphas):
+        regr = linear_model.Lasso(alpha=alpha)
+        regr.fit(X_train, y_train)
+        scores.append(regr.score(X_test, y_test))
+    ##绘图
+    plt.figure(0)
+    plt.plot(alphas, scores)
+    plt.xlabel("alpha")
+    plt.ylabel(r"score")
+    plt.xscale('log')
+    plt.title("Lasso")
+    plt.show()
+    """
+    if __name__=='__main__':
     X_train, X_test, y_train, y_test = load_data()  # 产生用于回归问题的数据集
-    test_Ridge_alpha(X_train, X_test, y_train, y_test)  # 调用 test_LinearRegression
+    test_Lasso_alpha(X_train, X_test, y_train, y_test)  # 调用 test_LinearRegression
+    """
